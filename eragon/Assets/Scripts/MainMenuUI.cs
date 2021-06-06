@@ -6,16 +6,24 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq; 
+using Newtonsoft.Json.Linq;
+
+
+
 
 
 public class MainMenuUI : MonoBehaviour
 { 
     String GameFileName = "test*.json"; 
     String GameFilePath = @"C:\Users\Edward\Downloads\Music\"; 
+    public GameObject buttonPrefab; 
+    public GameObject ContinuePanel; 
     private void SwitchPanel(GameObject toBeActivated, GameObject toBeDisabled){
         toBeDisabled.SetActive(false); 
         toBeActivated.SetActive(true); 
     }
+
+
 
 
 
@@ -27,7 +35,13 @@ public class MainMenuUI : MonoBehaviour
     }
 
     private  void onContinueGameClick(){ //Read JSON game save file
+        GameObject mainPanel = GameObject.Find("MainMenuPanel"); 
+        GameObject continuepanel = GameObject.Find("ContinuePanel"); 
+        
+        // SwitchPanel()
+        SwitchPanel(ContinuePanel, mainPanel); 
         List<string> data  = ReadFiles(GameFilePath, GameFileName); 
+        createButtons(data); 
         
 
     }
@@ -49,6 +63,20 @@ public class MainMenuUI : MonoBehaviour
             JsonSerializer serializer = new JsonSerializer();
             serializer.Serialize(file, data);
         }
+    }
+
+     private void createButton(string buttonName, int y){ 
+         //Start with 499 - 50 on each button .... 
+        int x = 325; //TODO: CHANGE THIS  -<< X Y POSITIONING  
+        int z = 0;  
+
+        GameObject button = (GameObject)Instantiate(buttonPrefab);
+        button.transform.SetParent(ContinuePanel.transform);
+        button.transform.position = new Vector3(x,y,z); 
+        button.GetComponent<Button>().onClick.AddListener(delegate(){ 
+            print(buttonName); // TODO: change this 
+        }); 
+        button.transform.GetChild(0).GetComponent<Text>().text = buttonName;
     }
 
 
@@ -78,15 +106,35 @@ public class MainMenuUI : MonoBehaviour
         }
 
 
+    private JObject readJson(String path){ 
+            using (StreamReader reader = File.OpenText(path))
+            {
+                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader)); 
+                return o;  
+                
+            }
+        }
 
 
-    private void testing(){
-        
+
+    private void writeJSON(String path, Dictionary<string, string> data){ 
+        JObject oldData = readJson(path); 
+          
+        foreach(KeyValuePair<string, string> entry in data)
+		{
+ 		    oldData[entry.Key] = entry.Value; 
+	    }
+        using (StreamWriter file = File.CreateText(@"C:\Users\Edward\Downloads\Music\a.json"))
+        {
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.Serialize(file, oldData);
+        }
+    }
 
 
 
-    } 
-    
+
+
     void OnGui(){
         if (GUI.Button(new Rect(10, 10, 150, 100), "I am a button"))
         {
@@ -94,49 +142,38 @@ public class MainMenuUI : MonoBehaviour
         }
     }
 
+    private void createButtons(List<string> buttonNames){ 
+        int y = 499; 
+        for (int i = 0; i <= buttonNames.Count - 1; i ++){ 
+            createButton(buttonNames[i], y); 
+            y -= 50; 
+        }
+
+    }
+
+  
+
 
 
     void Start()
     {   
-     
-        new ButtonCreator(); 
-        
-        Button newButton = GameObject.Find("New").GetComponent<Button>();
+        Button newButton = GameObject.Find("New").GetComponent<Button>(); //TODO: Cleanup 
         Button continueButton = GameObject.Find("Continue").GetComponent<Button>();
         Button settingsButton = GameObject.Find("Settings").GetComponent<Button>();
         Button exitButton = GameObject.Find("Exit").GetComponent<Button>();
-        
-
-        
-
-
-
         newButton.onClick.AddListener(delegate(){
             onNewGameClicK();
-
         });
         continueButton.onClick.AddListener(delegate(){
             onContinueGameClick(); 
-
         });
         settingsButton.onClick.AddListener(delegate(){
             onSettingsClick();
-
         });
         exitButton.onClick.AddListener(delegate(){
             onExitClick();
-
         });
 
-
-
-
-
-
-        // b.onClick.AddListener(delegate(){
-        //     b.GetComponentInChildren<Text>().text = "testing;"; 
-        
-        // } ); 
     }
 
 
