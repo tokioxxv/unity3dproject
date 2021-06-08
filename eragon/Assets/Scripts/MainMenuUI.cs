@@ -28,6 +28,7 @@ public class MainMenuUI : MonoBehaviour
 
 
     private  void onNewGameClicK(){ //create New JSON game file 
+        print("test22ing"); 
        String fileName = generateFileName(GameFilePath, GameFileName); 
        Dictionary<String, String> data = new Dictionary<String, String>(); 
        data.Add("testing", "isAdded"); 
