@@ -5,12 +5,10 @@ using UnityEngine;
 public class ThirdPersonMovement : MonoBehaviour
 {
     public CharacterController controller;
-    public Transform cam;
-
     public float moveSpeed = 5f;
     public float rotationSpeed = 300f;
 
-    void Update()
+    public void Move()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -28,6 +26,11 @@ public class ThirdPersonMovement : MonoBehaviour
         }
 
         controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+    }
+
+    void Update()
+    {
+        Move();
     }
 
 }
