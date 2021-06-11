@@ -9,7 +9,7 @@ using UnityEngine;
 public class JsonCrud
 {
     // Start is called before the first frame update
-    public static void CreateJSON(Dictionary<String, String> data, String path, String name)
+    public static void CreateJSON(String path, String name)
     {
         using (StreamWriter file = File.CreateText(path + name))
         {
@@ -36,7 +36,7 @@ public class JsonCrud
         {
             oldData[entry.Key] = entry.Value;
         }
-        using (StreamWriter file = File.CreateText(@"C:\Users\Edward\Downloads\Music\a.json"))
+        using (StreamWriter file = File.CreateText(path))
         {
             JsonSerializer serializer = new JsonSerializer();
             serializer.Serialize(file, oldData);

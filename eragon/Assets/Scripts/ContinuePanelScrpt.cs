@@ -9,8 +9,8 @@ public class ContinuePanelScrpt : MonoBehaviour
 {
 
 
-    String GameFileName = "test*.json";
-    String GameFilePath = @"C:\Users\Edward\Downloads\Music\";
+    String GameFileName = "SaveFile*.json";
+    String GameFilePath = Directory.GetCurrentDirectory() + "/UserFileTest/";
     public GameObject buttonPrefab;
     public GameObject ContinuePanel;
 

@@ -20,7 +20,8 @@ using Newtonsoft.Json.Linq;
         public GameObject MainMenuPanel; 
         public GameObject ContinuePanel;
         public GameObject NewGamePanel;
-        public GameObject SettingsPanel; 
+        public GameObject SettingsPanel;
+        public GameObject ActivePanel = null;
 
 
 
@@ -33,11 +34,14 @@ using Newtonsoft.Json.Linq;
 
         private void OnNewGameClicK()
         {
+            ActivePanel = NewGamePanel;
             SwitchPanel(NewGamePanel, MainMenuPanel); 
+            
         }
 
         private void OnContinueGameClick()
-        { 
+        {
+            ActivePanel = ContinuePanel;
             SwitchPanel(ContinuePanel, MainMenuPanel);
         }
 
@@ -49,8 +53,14 @@ using Newtonsoft.Json.Linq;
 
         private void OnSettingsClick()
         {
+            ActivePanel = SettingsPanel; 
             SwitchPanel(SettingsPanel, MainMenuPanel);    
             
+        }
+
+        private void OnBackClick()
+        {
+        SwitchPanel(MainMenuPanel, ActivePanel);
         }
          
 
@@ -59,11 +69,18 @@ using Newtonsoft.Json.Linq;
 
         void Start()
         {
+            
 
             Button newButton = GameObject.Find("New").GetComponent<Button>(); //TODO: Cleanup 
             Button continueButton = GameObject.Find("Continue").GetComponent<Button>();
             Button settingsButton = GameObject.Find("Settings").GetComponent<Button>();
             Button exitButton = GameObject.Find("Exit").GetComponent<Button>();
+            Button backButton = GameObject.Find("BackButton").GetComponent<Button>();
+
+
+
+
+
 
             newButton.onClick.AddListener(delegate () {
                 OnNewGameClicK();
@@ -77,8 +94,16 @@ using Newtonsoft.Json.Linq;
             exitButton.onClick.AddListener(delegate () {
                 OnExitClick();
             });
+            backButton.onClick.AddListener(delegate ()
+            {
+                OnBackClick();
 
-        }
+            });
+        
+    
+    
+    
+    }
 
 
         // Update is called once per frame

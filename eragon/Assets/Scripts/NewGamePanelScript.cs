@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-
-
+using UnityEngine.SceneManagement;
 
 namespace testing
 {
@@ -13,8 +12,8 @@ namespace testing
     public class NewGamePanelScript : MonoBehaviour
     {
 
-        String GameFileName = "test*.json";
-        String GameFilePath = @"C:\Users\Edward\Downloads\Music\";
+        String GameFileName = "SaveFile*.json";
+        String GameFilePath = Directory.GetCurrentDirectory() + "/UserFileTest/";
 
         private static String GenerateFileName(String path, String filename)
         {
@@ -57,12 +56,12 @@ namespace testing
 
         void Start()
         {
-
+            
 
             String fileName = GenerateFileName(GameFilePath, GameFileName);
-            Dictionary<String, String> data = new Dictionary<String, String>();
-            data.Add("testing", "isAdded");
-            JsonCrud.CreateJSON(data, GameFilePath, fileName);
+            JsonCrud.CreateJSON(GameFilePath, fileName);
+
+            SceneManager.LoadSceneAsync("BaseScene"); 
 
         }
 
